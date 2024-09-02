@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <!-- Carrega o React, React Dom e Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Read</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const Buttons = () => {
+            return (<div class="flex">
+                <a href="create.html"><button>Create</button> </a>
+                <a href="index.html"><button>Read</button> </a>
+                <a href="update.html"><button>Update</button> </a>
+                <a href="delete.html"><button>Delete</button></a>
+            </div>
+            );
+        }
+
+
+
+        const App = () => {
+            const [data, setData] = React.useState(null);
+
+            React.useEffect(() => {
+                fetch("https://localhost:7282/api/cad-pessoa")
+                    .then((response) => response.json())
+                    .then((dataJson) => setData(dataJson));
+            }, []);
+
+            /* fetch("https://localhost:7282/api/cad-pessoa") faz a requisição HTTP e retorna uma promessa.
+            .then((response) => response.json()) é chamado quando a promessa é resolvida (ou seja, quando a requisição é concluída com sucesso).
+            response.json() converte o objeto de resposta do servidor para um objeto JSON.
+            O resultado da conversão é passado para o próximo then, que é then((data) => setData(data)).
+            setData(data) é chamado com o objeto JSON convertido, que é o resultado final da requisição.
+            Então, o fluxo correto é:
+
+            Requisição HTTP -> Promessa
+            Promessa resolvida -> response.json() -> Objeto JSON
+            Objeto JSON -> then((data) => setData(data)) -> Estado do componente atualizado */
+
+            return (
+                <div>
+                    <Buttons />
+                    {data && (
+                        <div>
+                            {data.map((pessoa, index) => (
+                                <div class="card" key={index}>
+                                    <h1>CSUUID: {pessoa.id}</h1>
+                                    <h2>Nome: {pessoa.nome}</h2>
+                                    <p>Idade: {pessoa.idade}</p>
+                                    <p>Peso: {pessoa.peso}</p>
+                                    <p>Altura: {pessoa.altura}</p>
+                                    <p>Profissões: {pessoa.profissoes.join(', ')}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />)
+    </script>
+</body>
+
+</html>

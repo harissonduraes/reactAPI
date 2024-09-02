@@ -1,0 +1,23 @@
+body {
+
+    margin: 100px 300px;
+    flex-direction: column;
+    align-content: center;
+}
+
+div .card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 50px;
+    border: 1px solid;
+    margin: 5px;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+input {
+    display: block;
+}
